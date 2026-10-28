@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://identityka23.github.io/goalproof-ledger/sitemap.xml

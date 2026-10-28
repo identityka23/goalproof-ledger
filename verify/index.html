@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="https://identityka23.github.io/goalproof-ledger/">
+<title>Verify the record · GoalProof</title>
+<meta name="description" content="Recompute every GoalProof prediction fingerprint in your browser and compare it with the seal published before kick-off.">
+<link rel="canonical" href="https://identityka23.github.io/goalproof-ledger/verify/">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<meta name="theme-color" content="#0B1A33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoalProof">
+<meta property="og:title" content="Verify the record · GoalProof">
+<meta property="og:description" content="Recompute every GoalProof prediction fingerprint in your browser and compare it with the seal published before kick-off.">
+<meta property="og:url" content="https://identityka23.github.io/goalproof-ledger/verify/">
+<meta property="og:image" content="https://identityka23.github.io/goalproof-ledger/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://identityka23.github.io/goalproof-ledger/#org", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "logo": "https://identityka23.github.io/goalproof-ledger/assets/icon.png", "email": "support@plainwharf.com"}, {"@type": "WebSite", "@id": "https://identityka23.github.io/goalproof-ledger/#site", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "publisher": {"@id": "https://identityka23.github.io/goalproof-ledger/#org"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://identityka23.github.io/goalproof-ledger/"}, {"@type": "ListItem", "position": 2, "name": "Verify", "item": "https://identityka23.github.io/goalproof-ledger/verify/"}]}]}</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="./"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#13294B"/><circle cx="15" cy="15" r="9.5" fill="none" stroke="#C9A227" stroke-width="2.6"/><path d="M10.4 15.4l3.2 3.1 6.2-6.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>GoalProof</span></a>
+<nav class="main"><a href="./">Today</a><a href="record/">Record</a><a href="verify/" aria-current="page">Verify</a><a href="method/">Method</a><a href="day/">Archive</a></nav>
+</div></header>
+<main><div class="wrap">
+<h1>Verify the record</h1>
+<p class="lead">Each day's football predictions are sealed before kick-off and opened afterwards.
+This page recomputes every hash in your browser and compares it with the seal.</p>
+
+<div class="card">
+<label for="day">Day</label>
+<div class="row">
+  <select id="day"><option>Loading…</option></select>
+  <button id="go" class="btn" type="button">Verify</button>
+</div>
+<p class="muted" id="hist"></p>
+</div>
+
+<div class="card" id="result" hidden>
+<div class="status" id="status"></div>
+<div class="muted" id="sub"></div>
+<ul class="checks" id="checks"></ul>
+</div>
+
+<div class="card" id="picks" hidden>
+<label>Sealed picks</label>
+<table><thead><tr><th>Match</th><th>Pick</th><th class="num">Prob.</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<script>
+"use strict";
+const MARKETS = {"MS1": "Home win", "MS0": "Draw", "MS2": "Away win", "1X": "Home or draw (1X)", "X2": "Away or draw (X2)", "12": "Home or Away", "Üst 2.5": "Over 2.5 goals", "Alt 2.5": "Under 2.5 goals", "KG Var": "Both teams to score: Yes", "KG Yok": "Both teams to score: No", "Üst 1.5": "Over 1.5 goals", "Alt 1.5": "Under 1.5 goals", "Üst 3.5": "Over 3.5 goals", "Alt 3.5": "Under 3.5 goals", "İY1": "Home leads at half-time", "İY0": "Draw at half-time", "İY2": "Away leads at half-time", "İY Üst 0.5": "Over 0.5 first-half goals", "İY Alt 0.5": "No first-half goals", "İY Üst 1.5": "Over 1.5 first-half goals", "İY Alt 1.5": "Under 1.5 first-half goals", "Ev Üst 0.5": "Home team scores", "Ev Alt 0.5": "Home team fails to score", "Dep Üst 0.5": "Away team scores", "Dep Alt 0.5": "Away team fails to score"};  // site.py: defterdeki pazar adı → uygulamadaki İngilizce ad
+const $ = id => document.getElementById(id);
+let index = null;
+
+async function sha256(bytes) {
+  const d = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function get(path) {
+  const r = await fetch(path, {cache: "no-store"});
+  if (!r.ok) throw new Error(path + ": HTTP " + r.status);
+  return new Uint8Array(await r.arrayBuffer());
+}
+const text = b => new TextDecoder().decode(b);
+const enc = s => new TextEncoder().encode(s);
+
+// Mühür metnini çözer (README §2)
+function parseSeal(t) {
+  const lines = t.split("\n");
+  if (lines[0] !== "GoalProof daily seal v1" || lines[lines.length - 1] !== "") throw new Error("unknown seal format");
+  const field = (i, k) => { if (!lines[i].startsWith(k + ": ")) throw new Error("seal line " + (i + 1)); return lines[i].slice(k.length + 2); };
+  const cand = field(6, "candidates").split(" ");
+  const n = parseInt(field(7, "picks"), 10);
+  const picks = lines.slice(8, 8 + n);
+  if (picks.length !== n || lines.length !== 9 + n) throw new Error("seal pick count");
+  return {id: field(1, "id"), sealedAt: field(2, "sealed_at"), rule: field(3, "rule"), head: field(4, "ledger_head"),
+      fixtures: +field(5, "fixtures"), candidates: +cand[0], candSha: cand[1], picks};
+}
+
+async function verify(entry) {
+  const checks = [];
+  const add = (ok, msg) => checks.push([ok, msg]);
+  const txt = await get("muhur/" + entry.id + ".txt");
+  const digest = await sha256(txt);
+  add(digest === entry.digest, "Seal digest " + digest.slice(0, 16) + "… matches the published seal");
+  const seal = parseSeal(text(txt));
+  if (!entry.opened) return {state: "sealed", checks, seal};
+  const raw = text(await get("acik/" + entry.id + ".jsonl"));
+  const lines = raw.split("\n");
+  if (lines.pop() !== "") add(false, "Opened file ends with a newline");
+  add(lines.length === seal.picks.length, lines.length + " opened picks, " + seal.picks.length + " sealed");
+  const records = [];
+  let allMatch = lines.length === seal.picks.length;
+  for (let i = 0; i < lines.length; i++) {
+const h = await sha256(enc(lines[i]));
+if (h !== seal.picks[i]) allMatch = false;
+records.push(JSON.parse(lines[i]));
+  }
+  add(allMatch, "Every opened pick hashes to its sealed value");
+  let chain = true;
+  for (let i = 1; i < records.length; i++) if (records[i].onceki_hash !== seal.picks[i - 1]) chain = false;
+  if (seal.picks.length) chain = chain && seal.picks[seal.picks.length - 1] === seal.head;
+  add(chain, "Picks are consecutive in the chained ledger");
+  const cand = await get("aday/" + entry.id + ".json");
+  add(await sha256(cand) === seal.candSha, "Candidate set (" + seal.candidates + " matches) matches the seal");
+  return {state: checks.every(c => c[0]) ? "ok" : "bad", checks, seal, records};
+}
+
+function show(entry, res) {
+  $("result").hidden = false;
+  const st = $("status");
+  st.className = "status " + (res.state === "ok" ? "ok" : res.state === "bad" ? "bad" : "wait");
+  st.textContent = res.state === "ok" ? "Verified ✓" : res.state === "bad" ? "Mismatch ✗" : "Sealed — not opened yet";
+  const when = new Date(res.seal.sealedAt).toUTCString();
+  $("sub").innerHTML = "Sealed " + when + " · rule " + res.seal.rule + " · " + res.seal.picks.length + " picks" +
+(res.state === "sealed" ? "<br>Opens after the last match kicks off (" + new Date(entry.opens_after).toUTCString() + ")." : "") +
+"<br>Timestamp proof: <a href=\"muhur/" + entry.id + ".txt.ots\">" + entry.id + ".txt.ots</a> + " +
+"<a href=\"muhur/" + entry.id + ".txt\">" + entry.id + ".txt</a> → check at " +
+"<a href=\"https://opentimestamps.org\" rel=\"noopener\">opentimestamps.org</a>" +
+(entry.ots_complete ? " (anchored in Bitcoin)" : entry.ots ? " (Bitcoin confirmation pending, a few hours)" : " (no stamp)");
+  $("checks").replaceChildren(...res.checks.map(([ok, msg]) => {
+const li = document.createElement("li");
+li.innerHTML = "<span class=\"" + (ok ? "ok" : "bad") + "\">" + (ok ? "✓" : "✗") + "</span><span></span>";
+li.lastChild.textContent = msg;
+return li;
+  }));
+  const rows = $("rows");
+  rows.replaceChildren();
+  $("picks").hidden = !res.records;
+  for (const r of res.records || []) {
+const tr = document.createElement("tr");
+const tag = r.liste === "vip" ? "<span class=\"tag vip\">VIP</span> " : "<span class=\"tag\">Free</span> ";
+tr.innerHTML = "<td></td><td></td><td class=\"num\"></td>";
+tr.children[0].textContent = r.ev + " – " + r.dep;
+tr.children[0].insertAdjacentHTML("beforeend", "<div class=\"muted\"></div>");
+tr.children[0].lastChild.textContent = r.lig_adi + " · " + new Date(r.baslama).toUTCString().slice(0, 22) + " UTC";
+tr.children[1].innerHTML = tag;
+tr.children[1].append(MARKETS[r.pazar] || r.pazar);
+tr.children[2].textContent = Math.round(r.olasilik * 100) + "%";
+rows.append(tr);
+  }
+}
+
+async function run() {
+  const entry = index.seals.find(s => s.id === $("day").value);
+  if (!entry) return;
+  $("go").disabled = true;
+  try { show(entry, await verify(entry)); }
+  catch (e) { show(entry, {state: "bad", checks: [[false, "Could not verify: " + e.message]], seal: {sealedAt: entry.sealed_at, rule: entry.rule, picks: []}}); }
+  finally { $("go").disabled = false; }
+}
+
+(async () => {
+  try {
+index = JSON.parse(text(await get("index.json")));
+const sel = $("day");
+sel.replaceChildren(...index.seals.map(s => new Option(s.id + (s.opened ? "" : " (sealed)"), s.id)));
+if (!index.seals.length) sel.replaceChildren(new Option("No seals yet"));
+$("hist").textContent = index.history.picks + " earlier records (pre-timestamp history, from 28 Sep 2026) are in gecmis/tahminler.jsonl; they were not publicly sealed before kick-off.";
+const q = new URLSearchParams(location.search), want = q.get("d") || q.get("day");
+if (want && index.seals.some(s => s.id === want)) { sel.value = want; run(); }
+  } catch (e) { $("hist").textContent = "Could not load the ledger index: " + e.message; }
+  $("go").addEventListener("click", run);
+})();
+</script>
+
+</div></main>
+<footer class="bottom"><div class="wrap">
+<nav><a href="about/">About</a><a href="method/">Method</a><a href="responsible-gambling/">Responsible gambling</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
+<p>For information only · not advice · 18+. No ads, no betting links. GoalProof does not take bets and is not
+affiliated with any betting operator, league or club. Team names are shown as text only.</p>
+<p>Last updated 28 Oct 2026, 10:17 UTC · <a href="mailto:support@plainwharf.com">support@plainwharf.com</a></p>
+</div></footer>
+<script>document.querySelectorAll('time[data-local]').forEach(function(t){var d=new Date(t.dateTime);if(!isNaN(d))t.textContent=d.toLocaleString('en-GB', {weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});});</script>
+</body>
+</html>

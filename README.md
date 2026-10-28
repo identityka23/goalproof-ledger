@@ -5,7 +5,8 @@ that nothing was added, removed or edited afterwards. This repository is written
 GoalProof job. Nothing here is betting advice: football predictions for information only, 18+.
 No ads, no betting links.
 
-Browser check: **https://identityka23.github.io/goalproof-ledger/** (pick a day, press Verify).
+Browser check: **https://identityka23.github.io/goalproof-ledger/verify/** (pick a day, press Verify).
+The same repository also serves the GoalProof website (`index.html`, `record/`, `day/`, …).
 
 ## What is published, and when
 
