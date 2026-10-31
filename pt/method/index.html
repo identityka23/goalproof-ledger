@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="https://identityka23.github.io/goalproof-ledger/">
+<title>Como o GoalProof funciona · GoalProof</title>
+<meta name="description" content="Como os palpites do GoalProof são gerados, selados antes do início e verificados. As probabilidades são o consenso do mercado; não afirmamos vencê-lo.">
+<link rel="canonical" href="https://identityka23.github.io/goalproof-ledger/pt/method/">
+<link rel="alternate" hreflang="en" href="https://identityka23.github.io/goalproof-ledger/method/">
+<link rel="alternate" hreflang="tr" href="https://identityka23.github.io/goalproof-ledger/tr/method/">
+<link rel="alternate" hreflang="es" href="https://identityka23.github.io/goalproof-ledger/es/method/">
+<link rel="alternate" hreflang="pt-BR" href="https://identityka23.github.io/goalproof-ledger/pt/method/">
+<link rel="alternate" hreflang="x-default" href="https://identityka23.github.io/goalproof-ledger/method/">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<meta name="theme-color" content="#0B1A33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoalProof">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Como o GoalProof funciona · GoalProof">
+<meta property="og:description" content="Como os palpites do GoalProof são gerados, selados antes do início e verificados. As probabilidades são o consenso do mercado; não afirmamos vencê-lo.">
+<meta property="og:url" content="https://identityka23.github.io/goalproof-ledger/pt/method/">
+<meta property="og:image" content="https://identityka23.github.io/goalproof-ledger/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://identityka23.github.io/goalproof-ledger/#org", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "logo": "https://identityka23.github.io/goalproof-ledger/assets/icon.png", "email": "support@plainwharf.com"}, {"@type": "WebSite", "@id": "https://identityka23.github.io/goalproof-ledger/#site", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "publisher": {"@id": "https://identityka23.github.io/goalproof-ledger/#org"}, "inLanguage": ["en", "tr", "es", "pt-BR"]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://identityka23.github.io/goalproof-ledger/pt/"}, {"@type": "ListItem", "position": 2, "name": "Método", "item": "https://identityka23.github.io/goalproof-ledger/pt/method/"}]}]}</script>
+</head>
+<body data-updated="2026-10-31T12:22:50.759021+00:00">
+<header class="top"><div class="wrap">
+<a class="brand" href="pt/"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#13294B"/><circle cx="15" cy="15" r="9.5" fill="none" stroke="#C9A227" stroke-width="2.6"/><path d="M10.4 15.4l3.2 3.1 6.2-6.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>GoalProof</span></a>
+<nav class="main"><a href="pt/">Hoje</a><a href="pt/record/">Histórico</a><a href="pt/verify/">Verificar</a><a href="pt/method/" aria-current="page">Método</a><a href="pt/day/">Arquivo</a></nav>
+<nav class="langs" aria-label="Idioma"><a href="method/" hreflang="en" lang="en" title="English">EN</a><a href="tr/method/" hreflang="tr" lang="tr" title="Türkçe">TR</a><a href="es/method/" hreflang="es" lang="es" title="Español">ES</a><a href="pt/method/" hreflang="pt-BR" lang="pt-BR" title="Português" aria-current="true">PT</a></nav>
+</div></header>
+<main><div class="wrap">
+<p id="stale" class="card" hidden><strong>Dados atrasados.</strong> A atualização diária está atrasada; palpites e resultados aparecerão assim que os dados chegarem.</p>
+<h1>Como o GoalProof funciona</h1>
+<div class="card">
+<h2>Automático e depois selado</h2>
+<p>Os palpites são gerados automaticamente toda manhã pelas mesmas regras publicadas. Ninguém os escolhe nem os edita à mão.
+Cada palpite é escrito em um registro encadeado, e o selo do dia (uma impressão digital de cada palpite e a lista completa de jogos considerados)
+é publicado em um <a href="https://github.com/identityka23/goalproof-ledger">registro público</a> antes do início do primeiro jogo e recebe um carimbo de tempo no Bitcoin pelo <a href="https://opentimestamps.org">OpenTimestamps</a>.
+Depois do início, os palpites são abertos e qualquer pessoa pode <a href="pt/verify/">recalcular as impressões digitais</a>. Os selos diários são públicos desde 29 de outubro de 2026.
+Os registros de 28 de setembro de 2026 até o primeiro selo são publicados como histórico anterior ao selo: foram mantidos no registro encadeado, mas não foram selados publicamente antes do início.</p>
+<h2>De onde vem a porcentagem</h2>
+<p>A probabilidade é o consenso do mercado: a média dos preços de vários operadores para o jogo, sem a margem. Não afirmamos vencer o mercado.
+Em cinco anos de dados históricos, nosso próprio modelo de avaliação foi menos preciso que o mercado; por isso publicamos a visão do mercado em vez de fingir o contrário.</p>
+<h2>Quais jogos</h2>
+<p>Primeiro as principais ligas e torneios, depois uma lista mais ampla de ligas estabelecidas. Sem ligas de base, femininas, de reservas ou amadoras inferiores.
+Os palpites grátis têm alta probabilidade em uma faixa estreita de preço médio de mercado, no máximo 3 do mesmo tipo.
+Os palpites VIP priorizam ligas e torneios conhecidos; não são mais precisos.</p>
+<h2>O que não é</h2>
+<p>O GoalProof não é um serviço de apostas e não dá conselhos de apostas. Não aceita apostas, não direciona para sites de apostas e não mostra anúncios.
+A preços de mercado, o retorno esperado no longo prazo é negativo.</p>
+</div>
+</div></main>
+<footer class="bottom"><div class="wrap">
+<nav><a href="pt/about/">Sobre</a><a href="pt/method/">Método</a><a href="pt/responsible-gambling/">Jogo responsável</a><a href="pt/privacy/">Privacidade</a><a href="pt/terms/">Termos</a></nav>
+<p>Apenas informativo · não é aconselhamento · 18+. Sem anúncios e sem links de apostas. O GoalProof não aceita apostas e não é afiliado a nenhum operador de apostas, liga ou clube. Os nomes dos times aparecem apenas como texto.</p>
+<p>Última atualização 31 de outubro de 2026, 12:22 UTC · <a href="mailto:support@plainwharf.com">support@plainwharf.com</a></p>
+</div></footer>
+<script>document.querySelectorAll('time[data-local]').forEach(function(t){var d=new Date(t.dateTime);if(!isNaN(d))t.textContent=d.toLocaleString('pt-BR', {weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});});var u=Date.parse(document.body.dataset.updated);if(Date.now()-u>26*3600e3)document.getElementById('stale').hidden=false;</script>
+</body>
+</html>

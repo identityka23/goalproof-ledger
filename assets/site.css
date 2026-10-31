@@ -57,3 +57,14 @@ ul.checks { list-style:none; padding:0; margin:8px 0 0; }
 ul.checks li { padding:6px 0; border-top:1px solid var(--line); display:flex; gap:8px; }
 ul.checks li span:first-child { width:20px; flex:none; text-align:center; }
 label { font-weight:600; display:block; margin-bottom:6px; }
+/* Dil seçici */
+nav.langs { display:flex; gap:2px; margin-left:auto; font-size:13px; }
+nav.langs a { color:#d7deeb; text-decoration:none; padding:3px 6px; border-radius:6px; }
+nav.langs a[aria-current] { background:#E6C766; color:#0B1A33; font-weight:700; }
+/* Kilitli VIP kartı */
+.locked { display:flex; gap:10px; align-items:center; border:1px dashed var(--line); border-radius:12px; padding:10px 12px;
+          margin:8px 0; color:inherit; text-decoration:none; }
+a.locked:hover { border-color:var(--gold); }
+.locked .lock { flex:none; color:var(--gold); }
+.locked .m { min-width:0; font-weight:600; }
+.locked .muted { display:block; font-weight:400; }

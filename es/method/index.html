@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="https://identityka23.github.io/goalproof-ledger/">
+<title>Cómo funciona GoalProof · GoalProof</title>
+<meta name="description" content="Cómo se generan, se sellan antes del inicio y se verifican los pronósticos de GoalProof. Las probabilidades son el consenso del mercado; no afirmamos superarlo.">
+<link rel="canonical" href="https://identityka23.github.io/goalproof-ledger/es/method/">
+<link rel="alternate" hreflang="en" href="https://identityka23.github.io/goalproof-ledger/method/">
+<link rel="alternate" hreflang="tr" href="https://identityka23.github.io/goalproof-ledger/tr/method/">
+<link rel="alternate" hreflang="es" href="https://identityka23.github.io/goalproof-ledger/es/method/">
+<link rel="alternate" hreflang="pt-BR" href="https://identityka23.github.io/goalproof-ledger/pt/method/">
+<link rel="alternate" hreflang="x-default" href="https://identityka23.github.io/goalproof-ledger/method/">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<meta name="theme-color" content="#0B1A33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoalProof">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Cómo funciona GoalProof · GoalProof">
+<meta property="og:description" content="Cómo se generan, se sellan antes del inicio y se verifican los pronósticos de GoalProof. Las probabilidades son el consenso del mercado; no afirmamos superarlo.">
+<meta property="og:url" content="https://identityka23.github.io/goalproof-ledger/es/method/">
+<meta property="og:image" content="https://identityka23.github.io/goalproof-ledger/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://identityka23.github.io/goalproof-ledger/#org", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "logo": "https://identityka23.github.io/goalproof-ledger/assets/icon.png", "email": "support@plainwharf.com"}, {"@type": "WebSite", "@id": "https://identityka23.github.io/goalproof-ledger/#site", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "publisher": {"@id": "https://identityka23.github.io/goalproof-ledger/#org"}, "inLanguage": ["en", "tr", "es", "pt-BR"]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://identityka23.github.io/goalproof-ledger/es/"}, {"@type": "ListItem", "position": 2, "name": "Método", "item": "https://identityka23.github.io/goalproof-ledger/es/method/"}]}]}</script>
+</head>
+<body data-updated="2026-10-31T12:22:50.759021+00:00">
+<header class="top"><div class="wrap">
+<a class="brand" href="es/"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#13294B"/><circle cx="15" cy="15" r="9.5" fill="none" stroke="#C9A227" stroke-width="2.6"/><path d="M10.4 15.4l3.2 3.1 6.2-6.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>GoalProof</span></a>
+<nav class="main"><a href="es/">Hoy</a><a href="es/record/">Historial</a><a href="es/verify/">Verificar</a><a href="es/method/" aria-current="page">Método</a><a href="es/day/">Archivo</a></nav>
+<nav class="langs" aria-label="Idioma"><a href="method/" hreflang="en" lang="en" title="English">EN</a><a href="tr/method/" hreflang="tr" lang="tr" title="Türkçe">TR</a><a href="es/method/" hreflang="es" lang="es" title="Español" aria-current="true">ES</a><a href="pt/method/" hreflang="pt-BR" lang="pt-BR" title="Português">PT</a></nav>
+</div></header>
+<main><div class="wrap">
+<p id="stale" class="card" hidden><strong>Datos con retraso.</strong> La actualización diaria va tarde; los pronósticos y resultados aparecerán en cuanto lleguen los datos.</p>
+<h1>Cómo funciona GoalProof</h1>
+<div class="card">
+<h2>Automático y después sellado</h2>
+<p>Los pronósticos se generan automáticamente cada mañana con las mismas reglas publicadas. Nadie los elige ni los edita a mano.
+Cada pronóstico se escribe en un registro encadenado, y el sello del día (una huella de cada pronóstico y la lista completa de partidos considerados)
+se publica en un <a href="https://github.com/identityka23/goalproof-ledger">registro público</a> antes de que empiece el primer partido y recibe una marca de tiempo en Bitcoin mediante <a href="https://opentimestamps.org">OpenTimestamps</a>.
+Tras el inicio, los pronósticos se abren y cualquiera puede <a href="es/verify/">recalcular las huellas</a>. Los sellos diarios son públicos desde el 29 de octubre de 2026.
+Los registros desde el 28 de septiembre de 2026 hasta el primer sello se publican como historial previo al sellado: se guardaron en el registro encadenado, pero no se sellaron públicamente antes del inicio.</p>
+<h2>De dónde sale el porcentaje</h2>
+<p>La probabilidad es el consenso del mercado: el promedio de los precios de varios operadores para el partido, sin el margen. No afirmamos superar al mercado.
+En cinco años de datos históricos, nuestro propio modelo de valoración fue menos preciso que el mercado, así que publicamos la visión del mercado en lugar de fingir lo contrario.</p>
+<h2>Qué partidos</h2>
+<p>Primero las grandes ligas y torneos, después una lista más amplia de ligas consolidadas. Sin ligas juveniles, femeninas, de reservas ni amateurs inferiores.
+Los pronósticos gratis son de alta probabilidad en un rango estrecho de precio medio de mercado, máximo 3 del mismo tipo.
+Los pronósticos VIP dan prioridad a ligas y torneos conocidos; no son más acertados.</p>
+<h2>Qué no es</h2>
+<p>GoalProof no es un servicio de apuestas ni da consejos de apuestas. No acepta apuestas, no enlaza a sitios de apuestas y no muestra anuncios.
+A precios de mercado, el rendimiento esperado a largo plazo es negativo.</p>
+</div>
+</div></main>
+<footer class="bottom"><div class="wrap">
+<nav><a href="es/about/">Quiénes somos</a><a href="es/method/">Método</a><a href="es/responsible-gambling/">Juego responsable</a><a href="es/privacy/">Privacidad</a><a href="es/terms/">Condiciones</a></nav>
+<p>Solo informativo · no es asesoramiento · +18. Sin anuncios ni enlaces de apuestas. GoalProof no acepta apuestas ni está afiliado a ningún operador de apuestas, liga o club. Los nombres de los equipos se muestran solo como texto.</p>
+<p>Última actualización 31 de octubre de 2026, 12:22 UTC · <a href="mailto:support@plainwharf.com">support@plainwharf.com</a></p>
+</div></footer>
+<script>document.querySelectorAll('time[data-local]').forEach(function(t){var d=new Date(t.dateTime);if(!isNaN(d))t.textContent=d.toLocaleString('es-ES', {weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});});var u=Date.parse(document.body.dataset.updated);if(Date.now()-u>26*3600e3)document.getElementById('stale').hidden=false;</script>
+</body>
+</html>

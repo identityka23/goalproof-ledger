@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="https://identityka23.github.io/goalproof-ledger/">
+<title>Verificar el registro · GoalProof</title>
+<meta name="description" content="Recalcula en tu navegador la huella de cada pronóstico de GoalProof y compárala con el sello publicado antes del inicio.">
+<link rel="canonical" href="https://identityka23.github.io/goalproof-ledger/es/verify/">
+<link rel="alternate" hreflang="en" href="https://identityka23.github.io/goalproof-ledger/verify/">
+<link rel="alternate" hreflang="tr" href="https://identityka23.github.io/goalproof-ledger/tr/verify/">
+<link rel="alternate" hreflang="es" href="https://identityka23.github.io/goalproof-ledger/es/verify/">
+<link rel="alternate" hreflang="pt-BR" href="https://identityka23.github.io/goalproof-ledger/pt/verify/">
+<link rel="alternate" hreflang="x-default" href="https://identityka23.github.io/goalproof-ledger/verify/">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<meta name="theme-color" content="#0B1A33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GoalProof">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Verificar el registro · GoalProof">
+<meta property="og:description" content="Recalcula en tu navegador la huella de cada pronóstico de GoalProof y compárala con el sello publicado antes del inicio.">
+<meta property="og:url" content="https://identityka23.github.io/goalproof-ledger/es/verify/">
+<meta property="og:image" content="https://identityka23.github.io/goalproof-ledger/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://identityka23.github.io/goalproof-ledger/#org", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "logo": "https://identityka23.github.io/goalproof-ledger/assets/icon.png", "email": "support@plainwharf.com"}, {"@type": "WebSite", "@id": "https://identityka23.github.io/goalproof-ledger/#site", "name": "GoalProof", "url": "https://identityka23.github.io/goalproof-ledger/", "publisher": {"@id": "https://identityka23.github.io/goalproof-ledger/#org"}, "inLanguage": ["en", "tr", "es", "pt-BR"]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://identityka23.github.io/goalproof-ledger/es/"}, {"@type": "ListItem", "position": 2, "name": "Verificar", "item": "https://identityka23.github.io/goalproof-ledger/es/verify/"}]}]}</script>
+</head>
+<body data-updated="2026-10-31T12:22:50.759021+00:00">
+<header class="top"><div class="wrap">
+<a class="brand" href="es/"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#13294B"/><circle cx="15" cy="15" r="9.5" fill="none" stroke="#C9A227" stroke-width="2.6"/><path d="M10.4 15.4l3.2 3.1 6.2-6.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>GoalProof</span></a>
+<nav class="main"><a href="es/">Hoy</a><a href="es/record/">Historial</a><a href="es/verify/" aria-current="page">Verificar</a><a href="es/method/">Método</a><a href="es/day/">Archivo</a></nav>
+<nav class="langs" aria-label="Idioma"><a href="verify/" hreflang="en" lang="en" title="English">EN</a><a href="tr/verify/" hreflang="tr" lang="tr" title="Türkçe">TR</a><a href="es/verify/" hreflang="es" lang="es" title="Español" aria-current="true">ES</a><a href="pt/verify/" hreflang="pt-BR" lang="pt-BR" title="Português">PT</a></nav>
+</div></header>
+<main><div class="wrap">
+<p id="stale" class="card" hidden><strong>Datos con retraso.</strong> La actualización diaria va tarde; los pronósticos y resultados aparecerán en cuanto lleguen los datos.</p>
+<h1>Verificar el registro</h1>
+<p class="lead">Los pronósticos de fútbol de cada día se sellan antes del inicio y se abren después. Esta página recalcula cada huella en tu navegador y la compara con el sello.</p>
+
+<div class="card">
+<label for="day">Día</label>
+<div class="row">
+  <select id="day"><option>Cargando…</option></select>
+  <button id="go" class="btn" type="button">Verificar</button>
+</div>
+<p class="muted" id="hist"></p>
+</div>
+
+<div class="card" id="result" hidden>
+<div class="status" id="status"></div>
+<div class="muted" id="sub"></div>
+<ul class="checks" id="checks"></ul>
+</div>
+
+<div class="card" id="picks" hidden>
+<label>Pronósticos sellados</label>
+<table><thead><tr><th>Partido</th><th>Pronóstico</th><th class="num">Prob.</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+<script>
+"use strict";
+const MARKETS = {"MS1": "Gana el local", "MS0": "Empate", "MS2": "Gana el visitante", "1X": "Local o empate (1X)", "X2": "Visitante o empate (X2)", "12": "Gana local o visitante", "Üst 2.5": "Más de 2,5 goles", "Alt 2.5": "Menos de 2,5 goles", "KG Var": "Ambos marcan: Sí", "KG Yok": "Ambos marcan: No", "Üst 1.5": "Más de 1,5 goles", "Alt 1.5": "Menos de 1,5 goles", "Üst 3.5": "Más de 3,5 goles", "Alt 3.5": "Menos de 3,5 goles", "İY1": "El local gana el primer tiempo", "İY0": "Empate al descanso", "İY2": "El visitante gana el primer tiempo", "İY Üst 0.5": "Gol en el primer tiempo", "İY Alt 0.5": "Sin goles en el primer tiempo", "İY Üst 1.5": "Más de 1,5 goles en el primer tiempo", "İY Alt 1.5": "Menos de 1,5 goles en el primer tiempo", "Ev Üst 0.5": "El local marca", "Ev Alt 0.5": "El local no marca", "Dep Üst 0.5": "El visitante marca", "Dep Alt 0.5": "El visitante no marca"};  // site.py: defterdeki pazar adı → uygulamadaki ad
+const V = {"lead": "Los pronósticos de fútbol de cada día se sellan antes del inicio y se abren después. Esta página recalcula cada huella en tu navegador y la compara con el sello.", "day": "Día", "loading": "Cargando…", "button": "Verificar", "picks_label": "Pronósticos sellados", "match": "Partido", "pick": "Pronóstico", "prob": "Prob.", "free": "Gratis", "sealed_tag": " (sellado)", "no_seals": "Aún no hay días sellados", "ok": "Verificado ✓", "bad": "No coincide ✗", "wait": "Sellado · aún sin abrir", "sealed_line": "Sellado {0} · regla {1} · {2} pronósticos", "opens": "Se abre cuando empieza el último partido ({0}).", "proof": "Prueba de fecha y hora:", "check_at": "comprobar en", "anchored": " (anclado en Bitcoin)", "pending": " (confirmación de Bitcoin pendiente, unas horas)", "no_stamp": " (sin sello de tiempo)", "chk_digest": "El resumen del sello {0}… coincide con el sello publicado", "chk_newline": "El archivo abierto termina con salto de línea", "chk_count": "{0} pronósticos abiertos, {1} sellados", "chk_hash": "La huella de cada pronóstico abierto coincide con la sellada", "chk_chain": "Los pronósticos son consecutivos en el registro encadenado", "chk_cand": "El conjunto de candidatos ({0} partidos) coincide con el sello", "failed": "No se pudo verificar: {0}", "load_failed": "No se pudo cargar el índice del registro: {0}", "hist": "{0} registros anteriores (historial previo al sellado, desde el 28 de septiembre de 2026) están en gecmis/tahminler.jsonl; no se sellaron públicamente antes del inicio."};              // site_i18n.VERIFY
+const LOCALE = "es-ES";
+const fmt = (s, ...a) => a.reduce((x, v, i) => x.replace("{" + i + "}", v), s);
+const utc = d => new Date(d).toLocaleString(LOCALE, {dateStyle: "medium", timeStyle: "short", timeZone: "UTC"}) + " UTC";
+const $ = id => document.getElementById(id);
+let index = null;
+
+async function sha256(bytes) {
+  const d = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function get(path) {
+  const r = await fetch(path, {cache: "no-store"});
+  if (!r.ok) throw new Error(path + ": HTTP " + r.status);
+  return new Uint8Array(await r.arrayBuffer());
+}
+const text = b => new TextDecoder().decode(b);
+const enc = s => new TextEncoder().encode(s);
+
+// Mühür metnini çözer (README §2)
+function parseSeal(t) {
+  const lines = t.split("\n");
+  if (lines[0] !== "GoalProof daily seal v1" || lines[lines.length - 1] !== "") throw new Error("unknown seal format");
+  const field = (i, k) => { if (!lines[i].startsWith(k + ": ")) throw new Error("seal line " + (i + 1)); return lines[i].slice(k.length + 2); };
+  const cand = field(6, "candidates").split(" ");
+  const n = parseInt(field(7, "picks"), 10);
+  const picks = lines.slice(8, 8 + n);
+  if (picks.length !== n || lines.length !== 9 + n) throw new Error("seal pick count");
+  return {id: field(1, "id"), sealedAt: field(2, "sealed_at"), rule: field(3, "rule"), head: field(4, "ledger_head"),
+      fixtures: +field(5, "fixtures"), candidates: +cand[0], candSha: cand[1], picks};
+}
+
+async function verify(entry) {
+  const checks = [];
+  const add = (ok, msg) => checks.push([ok, msg]);
+  const txt = await get("muhur/" + entry.id + ".txt");
+  const digest = await sha256(txt);
+  add(digest === entry.digest, fmt(V.chk_digest, digest.slice(0, 16)));
+  const seal = parseSeal(text(txt));
+  if (!entry.opened) return {state: "sealed", checks, seal};
+  const raw = text(await get("acik/" + entry.id + ".jsonl"));
+  const lines = raw.split("\n");
+  if (lines.pop() !== "") add(false, V.chk_newline);
+  add(lines.length === seal.picks.length, fmt(V.chk_count, lines.length, seal.picks.length));
+  const records = [];
+  let allMatch = lines.length === seal.picks.length;
+  for (let i = 0; i < lines.length; i++) {
+const h = await sha256(enc(lines[i]));
+if (h !== seal.picks[i]) allMatch = false;
+records.push(JSON.parse(lines[i]));
+  }
+  add(allMatch, V.chk_hash);
+  let chain = true;
+  for (let i = 1; i < records.length; i++) if (records[i].onceki_hash !== seal.picks[i - 1]) chain = false;
+  if (seal.picks.length) chain = chain && seal.picks[seal.picks.length - 1] === seal.head;
+  add(chain, V.chk_chain);
+  const cand = await get("aday/" + entry.id + ".json");
+  add(await sha256(cand) === seal.candSha, fmt(V.chk_cand, seal.candidates));
+  return {state: checks.every(c => c[0]) ? "ok" : "bad", checks, seal, records};
+}
+
+function show(entry, res) {
+  $("result").hidden = false;
+  const st = $("status");
+  st.className = "status " + (res.state === "ok" ? "ok" : res.state === "bad" ? "bad" : "wait");
+  st.textContent = res.state === "ok" ? V.ok : res.state === "bad" ? V.bad : V.wait;
+  $("sub").innerHTML = fmt(V.sealed_line, utc(res.seal.sealedAt), res.seal.rule, res.seal.picks.length) +
+(res.state === "sealed" ? "<br>" + fmt(V.opens, utc(entry.opens_after)) : "") +
+"<br>" + V.proof + " <a href=\"muhur/" + entry.id + ".txt.ots\">" + entry.id + ".txt.ots</a> + " +
+"<a href=\"muhur/" + entry.id + ".txt\">" + entry.id + ".txt</a> → " + V.check_at + " " +
+"<a href=\"https://opentimestamps.org\" rel=\"noopener\">opentimestamps.org</a>" +
+(entry.ots_complete ? V.anchored : entry.ots ? V.pending : V.no_stamp);
+  $("checks").replaceChildren(...res.checks.map(([ok, msg]) => {
+const li = document.createElement("li");
+li.innerHTML = "<span class=\"" + (ok ? "ok" : "bad") + "\">" + (ok ? "✓" : "✗") + "</span><span></span>";
+li.lastChild.textContent = msg;
+return li;
+  }));
+  const rows = $("rows");
+  rows.replaceChildren();
+  $("picks").hidden = !res.records;
+  for (const r of res.records || []) {
+const tr = document.createElement("tr");
+const tag = r.liste === "vip" ? "<span class=\"tag vip\">VIP</span> " : "<span class=\"tag\">" + V.free + "</span> ";
+tr.innerHTML = "<td></td><td></td><td class=\"num\"></td>";
+tr.children[0].textContent = r.ev + " – " + r.dep;
+tr.children[0].insertAdjacentHTML("beforeend", "<div class=\"muted\"></div>");
+tr.children[0].lastChild.textContent = r.lig_adi + " · " + utc(r.baslama);
+tr.children[1].innerHTML = tag;
+tr.children[1].append(MARKETS[r.pazar] || r.pazar);
+tr.children[2].textContent = new Intl.NumberFormat(LOCALE, {style: "percent"}).format(r.olasilik);
+rows.append(tr);
+  }
+}
+
+async function run() {
+  const entry = index.seals.find(s => s.id === $("day").value);
+  if (!entry) return;
+  $("go").disabled = true;
+  try { show(entry, await verify(entry)); }
+  catch (e) { show(entry, {state: "bad", checks: [[false, fmt(V.failed, e.message)]], seal: {sealedAt: entry.sealed_at, rule: entry.rule, picks: []}}); }
+  finally { $("go").disabled = false; }
+}
+
+(async () => {
+  try {
+index = JSON.parse(text(await get("index.json")));
+const sel = $("day");
+sel.replaceChildren(...index.seals.map(s => new Option(s.id + (s.opened ? "" : V.sealed_tag), s.id)));
+if (!index.seals.length) sel.replaceChildren(new Option(V.no_seals));
+$("hist").textContent = fmt(V.hist, index.history.picks);
+const q = new URLSearchParams(location.search), want = q.get("d") || q.get("day");
+if (want && index.seals.some(s => s.id === want)) { sel.value = want; run(); }
+  } catch (e) { $("hist").textContent = fmt(V.load_failed, e.message); }
+  $("go").addEventListener("click", run);
+})();
+</script>
+
+</div></main>
+<footer class="bottom"><div class="wrap">
+<nav><a href="es/about/">Quiénes somos</a><a href="es/method/">Método</a><a href="es/responsible-gambling/">Juego responsable</a><a href="es/privacy/">Privacidad</a><a href="es/terms/">Condiciones</a></nav>
+<p>Solo informativo · no es asesoramiento · +18. Sin anuncios ni enlaces de apuestas. GoalProof no acepta apuestas ni está afiliado a ningún operador de apuestas, liga o club. Los nombres de los equipos se muestran solo como texto.</p>
+<p>Última actualización 31 de octubre de 2026, 12:22 UTC · <a href="mailto:support@plainwharf.com">support@plainwharf.com</a></p>
+</div></footer>
+<script>document.querySelectorAll('time[data-local]').forEach(function(t){var d=new Date(t.dateTime);if(!isNaN(d))t.textContent=d.toLocaleString('es-ES', {weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});});var u=Date.parse(document.body.dataset.updated);if(Date.now()-u>26*3600e3)document.getElementById('stale').hidden=false;</script>
+</body>
+</html>
