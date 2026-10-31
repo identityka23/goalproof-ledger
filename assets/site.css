@@ -1,12 +1,17 @@
 /* GoalProof: Mühürlü Makbuz. Kâğıt zemin + lacivert metin; altın yalnız mühür işaretinde, Manrope + eşit genişlikli rakam */
 @font-face { font-family:Manrope; src:url(Manrope.woff2) format("woff2"); font-weight:200 800; font-display:swap; }
 @font-face { font-family:"JetBrains Mono"; src:url(JetBrainsMono-Medium.woff2) format("woff2"); font-weight:500; font-display:swap; }
-:root { --paper:#F7F5F0; --sheet:#FBFAF7; --ink:#0B1A33; --ink2:#1F3A63; --muted:#5B6475; --gold:#8A6A1F; --ok:#2E7D5B; --bad:#B3443A;
-        --frame:#1F3A63; --rule:#D9D5CA; --band-ink:#FFFFFF; --head:#0B1A33; --head-ink:#FFFFFF; --head-muted:#C6D0E2; --head-rule:#0B1A33;
+:root { --paper:#F1F4FA; --sheet:#FFFFFF; --ink:#0B1A33; --ink2:#1F3A63; --muted:#566076; --gold:#8A6A1F; --ok:#197A50; --bad:#C13B2E;
+        --frame:#CBD6E8; --rule:#E1E7F1; --band-ink:#FFFFFF; --head:#0B1A33; --head-ink:#FFFFFF; --head-muted:#C6D0E2; --head-rule:#0B1A33;
+        --blue:#1D5FC4; --chip:#E4EDFB; --chip-ink:#123F85; --stub:#1D5FC4; --stub-ink:#FFFFFF; --stub-muted:#DCE8FB; --vip-stub:#0B1A33; --tag-bg:#E6C766; --tag-ink:#0B1A33;
+        --hero:#0F2547; --hero-ink:#FFFFFF; --hero-muted:#C6D0E2; --hero-rule:#2F4A75; --hero-ok:#7FE3B4; --hero-bad:#FFB4A8; --panel:#0B1A33; --panel-ink:#FFFFFF; --panel-muted:#C6D0E2; --panel-rule:#2F4A75; --panel-gold:#E6C766;
+        --blur:#9DB2D3; --blur-num:#4F76B5;
         --mono:"JetBrains Mono",ui-monospace,Consolas,monospace; }
 @media (prefers-color-scheme: dark) {
   :root { --paper:#0B1A33; --sheet:#13284A; --ink:#F1F3F8; --ink2:#C6D0E2; --muted:#A9B3C7; --gold:#D4A94A; --ok:#63C79B; --bad:#FF9D90;
-          --frame:#4A6792; --rule:#2A4570; --band-ink:#0B1A33; --head-rule:#2A4570; color-scheme:dark; }
+          --frame:#2F4A75; --rule:#2A4570; --band-ink:#0B1A33; --head-rule:#2A4570;
+          --blue:#6EA4F2; --chip:#1D3B6B; --chip-ink:#D7E5FB; --stub:#1D5FC4; --vip-stub:#07122A;
+          --hero:#13284A; --panel:#10213F; --blur:#52698F; --blur-num:#3B5F9E; color-scheme:dark; }
 }
 * { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; }
@@ -32,7 +37,6 @@ nav.langs a[aria-current] { color:var(--head-ink); text-decoration:underline; te
 
 main { padding:30px 0 56px; }
 main section + section { margin-top:52px; }
-main section.ledger { margin-top:24px; }
 h1 { font-size:clamp(28px, 4.2vw, 40px); line-height:1.12; margin:0 0 10px; font-weight:800; letter-spacing:-.028em; text-wrap:balance; }
 h2 { font-size:25px; line-height:1.2; margin:36px 0 12px; font-weight:800; letter-spacing:-.02em; }
 h3 { font-size:17px; line-height:1.3; margin:0 0 4px; font-weight:800; letter-spacing:-.01em; }
@@ -45,7 +49,6 @@ p.lead { color:var(--muted); font-size:17px; margin:0 0 20px; max-width:66ch; }
 .prose li { margin-bottom:8px; }
 
 /* Giriş */
-.intro p { margin:0; max-width:68ch; color:var(--ink2); }
 .row { display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:14px; }
 .btn { display:inline-block; background:var(--ink); color:var(--paper); font:inherit; font-weight:800; text-decoration:none; padding:10px 18px; border-radius:6px; border:1px solid transparent; cursor:pointer; line-height:1.3; }
 a.btn:hover { background:var(--ink2); }
@@ -116,18 +119,6 @@ h3 + .muted { margin:2px 0 12px; }
 .compact .prob { font-size:32px; }
 .compact .odds { font-size:11px; }
 
-/* Kilitli VIP paneli */
-.vip-panel { background:var(--sheet); border:1px dashed var(--frame); border-radius:6px; padding:16px 16px 0; margin-bottom:14px; }
-.vip-panel p { margin:0 0 12px; }
-.vip-panel .tickets-locked { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px 14px; margin-bottom:12px; }
-.locked { display:flex; gap:12px; align-items:center; color:inherit; text-decoration:none; min-width:0; }
-a.locked:hover { text-decoration:underline; }
-.locked .lock { flex:none; color:var(--ink2); }
-.locked .m { min-width:0; font-weight:800; font-size:15px; line-height:1.35; }
-.locked .muted { display:block; font-weight:500; font-size:13px; }
-.vip-cta { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.vip-panel .rcpt-foot { margin:0 -16px; }
-
 /* Rakam kutuları (karne sayfası) */
 .tiles { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); border-top:2px solid var(--ink); border-bottom:1px solid var(--rule); margin-bottom:14px; }
 .tile { padding:16px 18px; min-width:0; }
@@ -168,11 +159,74 @@ ul.checks li { padding:8px 0; border-top:1px solid var(--rule); display:flex; ga
 ul.checks li span:first-child { width:20px; flex:none; text-align:center; font-weight:800; }
 label { font-weight:700; display:block; margin-bottom:6px; }
 
+/* Renkli ana sayfa: lacivert üst panel, mavi yüzde kutusu, ücretsiz ve VIP ayrı bölüm */
+.hero { position:relative; overflow:hidden; background:var(--hero); color:var(--hero-ink); border-radius:14px; padding:28px 28px 8px; }
+.hero > * { position:relative; }
+.hero .pitch { position:absolute; right:-70px; top:50%; transform:translateY(-50%); width:420px; height:420px; color:#FFFFFF; opacity:.07; pointer-events:none; }
+.hero h1 { color:var(--hero-ink); }
+.hero p { margin:0; max-width:68ch; color:var(--hero-muted); }
+.hero a:not(.btn) { color:var(--hero-ink); font-weight:700; }
+.hero .figures { margin-top:20px; border-top:1px solid var(--hero-rule); border-bottom:0; }
+.hero .fig + .fig { border-left-color:var(--hero-rule); }
+.hero .fig > span { color:var(--hero-muted); }
+.hero .fig.yest .v { color:var(--hero-ink); }
+.hero .c-ok { color:var(--hero-ok); } .hero .c-bad { color:var(--hero-bad); }
+.hero .btn { background:var(--hero-ink); color:var(--hero); }
+.today-line { margin:30px 0 4px; font-size:15px; font-weight:600; color:var(--muted); }
+.today-line b { color:var(--ink); font-size:20px; font-weight:800; letter-spacing:-.015em; margin-right:8px; }
+main section.free-sec, main section.vip-panel { margin-top:26px; }
+.free-sec .sec-head { border-bottom-color:var(--blue); border-bottom-width:3px; }
+.free-sec .sec-head h2 { color:var(--blue); }
+
+/* Kart rengi */
+.rcpt { border-color:var(--frame); border-radius:10px; box-shadow:0 1px 2px rgba(11,26,51,.05),0 6px 18px rgba(11,26,51,.06); }
+.num { align-self:center; min-width:104px; padding:12px 10px; border-radius:8px; background:var(--stub); color:var(--stub-ink); text-align:center; }
+.is-vip .num { background:var(--vip-stub); }
+.odds { color:var(--stub-muted); }
+.prob { font-size:38px; }
+.pickname { display:inline-block; margin-top:8px; padding:4px 10px; border-radius:7px; background:var(--chip); color:var(--chip-ink); font-size:15px; }
+.bar { height:6px; margin-top:10px; border-radius:3px; background:var(--rule); overflow:hidden; }
+.bar i { display:block; height:100%; border-radius:3px; background:var(--blue); }
+.tag.vip { background:var(--tag-bg); color:var(--tag-ink); border-color:var(--tag-bg); }
+.compact .num { min-width:84px; padding:9px 8px; }
+.compact .prob { font-size:28px; }
+.compact .pickname { font-size:13.5px; padding:3px 8px; margin-top:6px; }
+.compact .bar { margin-top:8px; }
+.compact .odds { font-size:10.5px; }
+
+/* VIP paneli */
+.vip-panel { background:var(--panel); color:var(--panel-ink); border:0; border-radius:14px; padding:22px 22px 0; margin-bottom:14px; }
+.vip-panel .sec-head { border-bottom:3px solid var(--panel-gold); }
+.vip-panel .sec-head h2 { color:var(--panel-ink); }
+.vip-panel > p { color:var(--panel-ink); }
+.vip-panel > p a { color:var(--panel-ink); }
+.vip-panel > .muted { color:var(--panel-muted); margin:12px 0 14px; max-width:86ch; }
+.vip-panel .tickets { margin-bottom:0; }
+.vip-panel > .rcpt-foot { margin:0 -22px; padding:10px 22px; border-top-color:var(--panel-rule); }
+.vip-panel > .rcpt-foot .fp { color:var(--panel-muted); }
+.vip-panel > .rcpt-foot a { color:var(--panel-ink); }
+.vip-panel > .rcpt-foot .sealed { color:var(--panel-gold); }
+.locked { display:flex; flex-direction:column; gap:12px; min-width:0; padding:14px 16px; background:var(--sheet); color:var(--ink); border-radius:10px; text-decoration:none; }
+a.locked:hover { text-decoration:none; outline:2px solid var(--panel-gold); }
+.lk-top { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--muted); }
+.lk-blur { flex:1; display:grid; grid-template-columns:minmax(0, 1fr) 96px; gap:14px; align-items:center; }
+.lk-lines { display:flex; flex-direction:column; gap:9px; }
+.lk-lines span { display:block; height:13px; border-radius:7px; background:var(--blur); filter:blur(4px); }
+.lk-lines .short { width:60%; }
+.lk-num { height:62px; border-radius:8px; background:var(--blur-num); filter:blur(7px); }
+.lk-cta { display:flex; align-items:center; gap:10px; }
+.lk-cta .lock { flex:none; color:var(--blue); }
+.lk-cta .m { min-width:0; font-size:12.5px; line-height:1.35; color:var(--muted); }
+.lk-cta strong { display:block; font-size:14.5px; color:var(--blue); }
+
 @media (max-width:980px) { .tickets.three { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
 @media (max-width:760px) {
   header.top .wrap { grid-template-columns:1fr auto; }
   nav.main { grid-column:1 / -1; order:3; }
-  .tickets, .tickets.three, .vip-panel .tickets-locked { grid-template-columns:minmax(0, 1fr); }
+  .tickets, .tickets.three { grid-template-columns:minmax(0, 1fr); }
+  .hero { padding:22px 18px 6px; }
+  .vip-panel { padding:18px 16px 0; }
+  .vip-panel > .rcpt-foot { margin:0 -16px; padding:10px 16px; }
   .steps { grid-template-columns:minmax(0, 1fr); gap:18px; }
   .figures, .figures.with-y { grid-template-columns:repeat(3, minmax(0, 1fr)); }
   .fig { padding:12px 10px 12px 0; }
