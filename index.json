@@ -1,6 +1,6 @@
 {
  "format": 1,
- "updated_at": "2026-11-01T21:02:58+00:00",
+ "updated_at": "2026-11-02T05:01:30+00:00",
  "first_seal": "2026-10-29",
  "history": {
   "picks": 388,
@@ -17,7 +17,7 @@
    "opens_after": "2026-11-03T01:00:00+03:00",
    "opened": false,
    "ots": true,
-   "ots_complete": false
+   "ots_complete": true
   },
   {
    "id": "2026-11-01",
