@@ -1,12 +1,24 @@
 {
  "format": 1,
- "updated_at": "2026-11-14T05:01:28+00:00",
+ "updated_at": "2026-11-14T21:03:10+00:00",
  "first_seal": "2026-10-29",
  "history": {
   "picks": 388,
   "label": "pre-timestamp history"
  },
  "seals": [
+  {
+   "id": "2026-11-15",
+   "day": "2026-11-15",
+   "sealed_at": "2026-11-14T21:02:56+00:00",
+   "rule": "v7-2026-10-28",
+   "digest": "7c99f47050cbccc76d072c7a034c9c0d1ac0812803241654478f274f681a1e86",
+   "picks": 15,
+   "opens_after": "2026-11-15T23:00:00+03:00",
+   "opened": false,
+   "ots": true,
+   "ots_complete": false
+  },
   {
    "id": "2026-11-14",
    "day": "2026-11-14",
