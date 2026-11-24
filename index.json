@@ -1,6 +1,6 @@
 {
  "format": 1,
- "updated_at": "2026-11-23T21:02:58+00:00",
+ "updated_at": "2026-11-24T05:01:32+00:00",
  "first_seal": "2026-10-29",
  "history": {
   "picks": 388,
@@ -17,7 +17,7 @@
    "opens_after": "2026-11-25T00:00:00+03:00",
    "opened": false,
    "ots": true,
-   "ots_complete": false
+   "ots_complete": true
   },
   {
    "id": "2026-11-23",
@@ -27,7 +27,7 @@
    "digest": "7a7e3bdd492f1d6c6602821757bb0ffb90490ac8b3230859ae33a018a514c772",
    "picks": 15,
    "opens_after": "2026-11-24T00:15:00+03:00",
-   "opened": false,
+   "opened": true,
    "ots": true,
    "ots_complete": true
   },
